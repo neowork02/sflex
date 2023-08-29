@@ -1,0 +1,122 @@
+<template>
+  <sui-page>
+    <sui-page-header :pageId="contextPageId" />
+    <sui-page-contents>
+      <div class="comm_scr_wrap">
+        <div class="row">
+          <div class="col-xs-1">
+            <sui-input-label
+              :label="$t('MSG_TXT_SEARCH_COND')"
+              :vertical="false"
+            />
+          </div>
+          <div class="col-xs-5">
+            <sui-code-select
+              ref="codeSelectSearchCond"
+              v-model="queryData.approvalSearchCond"
+              :defaultOption="'all'"
+              codeId="COD_BBS_SCH_COND_PSTNG"
+              class="width60"
+            />
+            <div class="comp_spacing" />
+            <sui-text-field
+              ref="textFieldSearchText"
+              v-model="queryData.searchText"
+              :disabled="false"
+              :readonly="false"
+              maxlength="50"
+              @keyup="onKeyUpInput()"
+              @keyup.enter="onClickSearch"
+            />
+          </div>
+          <div class="col-xs-1">
+            <sui-input-label
+              :label="$t('MSG_TXT_RGST_DT')"
+              :vertical="false"
+            />
+          </div>
+          <div class="col-xs-5">
+            <ur-range-picker
+              ref="datePicker"
+              v-model="rangeDate1"
+              oneInputMode
+              init="today"
+              :inputType=this.userDateFormat
+              :modelType=this.userDateFormat
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-1">
+            <sui-input-label
+              :label="$t('MSG_TXT_STT')"
+              :vertical="false"
+            />
+          </div>
+          <div class="col-xs-5">
+            <sui-code-select
+              ref="codeSelectStatus"
+              v-model="queryData.status"
+              :defaultOption="'all'"
+              :initialSelectedIndex="2"
+              codeId="COD_NOTICOBJ_APPR_STT"
+            />
+          </div>
+        </div>
+        <div class="btn_wrap">
+          <sui-button
+            v-permission:read="contextPageId"
+            type="button"
+            class="comm_btn_Reset"
+            @click="onClickReset"
+          >
+            {{ $t('MSG_BTN_RESET') }}
+          </sui-button>
+          <sui-button
+            v-permission:read="contextPageId"
+            type="button"
+            class="comm_btn_Scr"
+            @click="onClickSearch"
+          >
+            {{ $t('MSG_BTN_SRCH') }}
+          </sui-button>
+        </div>
+      </div>
+      <div class="mrB30" />
+      <sui-s-grid
+        ref="grid"
+        :hideheader="false"
+        :headers="gridColumns0"
+        :data-source="dataset0"
+        :initialRowsPerPage="10"
+        :showDisplayCountControl="true"
+        :pageable="false"
+      />
+      <sui-popup
+        v-model="showPopup"
+        :title="$t('MSG_TIT_NOTICOBJ_APPR_POPUP')"
+      >
+        <p01
+          :biddingInformationParam="biddingInformationParam"
+          :parentPageId="contextPageId"
+          @exit="onPopupCancelClicked"
+        />
+      </sui-popup>
+    </sui-page-contents>
+  </sui-page>
+</template>
+<script>
+import { urDataSet } from 'uidev-component/index';
+import BasePage from '~cm/components/BasePage';
+import p01 from './components/PGE_CLB_00006_P01';
+
+export default {
+  name: 'PGE_CLB_00006', // eslint-disable-line vue/name-property-casing
+  components: {
+    p01,
+  },
+  extends: BasePage,
+};
+</script>
+<style scoped>
+</style>
